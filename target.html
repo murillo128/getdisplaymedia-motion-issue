@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <style>
+    body {
+      width: 100%;
+      height: 100%;
+      background-color: black;
+    }
+    #pixel {
+      width: 1px;
+      height: 1px;
+    }
+  </style>
+</head>
+<body>
+<div id="pixel"></div>
+</body>
+</html>
+<script>
+function idle()
+{
+  document.querySelector("#pixel").style["background-color"] = "#" + (Math.random() * 0xFFFFFF << 0).toString(16);
+  requestAnimationFrame(idle)
+}
+idle();
+</script>
