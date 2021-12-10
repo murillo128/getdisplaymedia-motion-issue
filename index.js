@@ -19,13 +19,16 @@ function syntaxHighlight(data) {
 
 	
 document.querySelector ("button").onclick = async ()=> {
-	window.open("target.html","_blank","toolbar=no,scrollbars=no,resizable=no,width:1280,height:720");
+	const wnd = window.open("target.html","_blank","toolbar=yes,scrollbars=no,resizable=no,width:1280,height:720");
+	
+	wnd.blur();
+	window.focus();
 
 	const stream = await navigator.mediaDevices.getDisplayMedia({video:{
 		frameRate: 30,
 		width: 1280,
 		height: 720,
-		cursor: "motion"
+		//cursor: "motion"
 	}});
 
 	const videoTrack = stream.getVideoTracks()[0];
@@ -58,7 +61,7 @@ document.querySelector ("button").onclick = async ()=> {
 	receiver.onicecandidate = ({candidate}) => candidate && sender.addIceCandidate(candidate);
 	
 	//add audio context dest stream
-	sender.addTrack(videoTrack);
+	sender.addTransceiver(videoTrack);
 	
 	const offer = await sender.createOffer();
 	offer.sdp = offer.sdp.replace("useinbandfec=1", "useinbandfec=0; dtx=0; stereo=1; ptime=10; maxptime=10;")
@@ -71,7 +74,10 @@ document.querySelector ("button").onclick = async ()=> {
 	await sender.setRemoteDescription(answer);
 
 	//Started
-	document.body.children[0].innerText = "started";
+	document.querySelector("button").textContent = "replace track";
+	document.querySelector("button").onclick = () => {
+		sender.getSenders()[0].replaceTrack(videoTrack);
+	};
 
 
 	setInterval(async () => {
@@ -82,4 +88,6 @@ document.querySelector ("button").onclick = async ()=> {
 			if (stat.type=="outbound-rtp")
 				document.querySelector ("#stats>pre").innerHTML = syntaxHighlight(stat);
 	}, 1000);
+
+	
 };

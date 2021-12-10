@@ -9,21 +9,35 @@
       height: 100%;
       background-color: black;
     }
+
     #pixel {
       width: 1px;
       height: 1px;
     }
+
+    iframe {
+     
+      width: 1280px;
+      height: 800px;
+    }
+
+    .hidden {
+      display: none;
+    }
   </style>
 </head>
 <body>
-<div id="pixel"></div>
+  <div id="pixel"></div><button>Play</button>
+  <iframe class="hidden" src="https://www.youtube.com/embed/41hv2tW5Lc4?mute=1" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; mute; muted; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 </body>
 </html>
 <script>
-function idle()
-{
-  document.querySelector("#pixel").style["background-color"] = "#" + (Math.random() * 0xFFFFFF << 0).toString(16);
-  requestAnimationFrame(idle)
-}
-idle();
+  function idle()
+  {
+    document.querySelector("#pixel").style["background-color"] = "#" + (Math.random() * 0xFFFFFF << 0).toString(16);
+    requestAnimationFrame(idle)
+  }
+  idle();
+
+  document.querySelector("button").onclick = () => { document.querySelector("iframe").classList.toggle("hidden");}
 </script>
